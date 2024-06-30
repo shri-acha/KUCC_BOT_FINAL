@@ -9,3 +9,4 @@ console.log(containsEmoji(testString)); // Output: true
 
 const testString2 = 'Hello';
 console.log(containsEmoji(testString2)); // Output: false
+//test
