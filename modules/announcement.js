@@ -27,7 +27,7 @@ module.exports = async (client) => {
         // Check if the message starts with *KUCC
         if (message.content.startsWith('*KUCC ')) {
             // Check if the author has the "moderator" role
-            const moderatorRole = message.guild.roles.cache.find(role => role.name === 'moderators');
+            const moderatorRole = message.guild.roles.cache.find(role => role.name === 'Moderator');
             if (!moderatorRole || !message.member.roles.cache.has(moderatorRole.id)) {
                 const reply = await message.reply('You do not have the necessary role to use this command.');
                 setTimeout(() => reply.delete(), 5000); // Delete reply after 5 seconds

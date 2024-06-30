@@ -42,7 +42,7 @@ module.exports = async (interaction) => {
         roleemoji=roleemojifull
     }
     const modRole = interaction.guild.roles.cache.find(
-        (role) => role.name === "moderators"
+        (role) => role.name === "Moderator"
     );
     
         // Create the new role

@@ -21,7 +21,7 @@ module.exports = async (interaction) => {
     //previlage check
     const newrole = interaction.options.get('role_name').value;
     const modRole = interaction.guild.roles.cache.find(
-        (role) => role.name === "moderators"
+        (role) => role.name === "Moderator"
     );
     const hasrole = interaction.member.roles.cache.has(modRole.id);
 
