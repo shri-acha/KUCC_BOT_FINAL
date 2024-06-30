@@ -70,9 +70,7 @@ client.on('ready', async (c) => {
     var welcomeMessage = `React below to get access to the specific communities.Choose as many Communities as you would like to be a part of
     _____________________________________________________________________________`;
     var StatusMessage=`React According to your current status in KU
-    Student👩‍🎓
-    Teacher👩‍🏫
-    Worker👨‍💼
+   
     ____________________________________________________________________________`
 
     

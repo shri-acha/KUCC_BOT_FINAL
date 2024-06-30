@@ -55,7 +55,7 @@ module.exports = async (interaction) => {
 
         // Create a category with the role name
         const category = await interaction.guild.channels.create({
-            name: newrole+"Community",
+            name: newrole+" Community",
             type: ChannelType.GuildCategory,
             permissionOverwrites: [
                 {
