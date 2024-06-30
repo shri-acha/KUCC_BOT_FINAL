@@ -161,7 +161,7 @@ module.exports = async (interaction) => {
         });
         const channel = interaction.guild.channels.cache.get(process.env.ReactRole);
 
-        const messageold = await channel.messages.fetch(process.env.MessageId);
+        const messageold = await channel.messages.fetch(process.env.RoleMessageId);
         if (customemoji) {
             try {
                 const emojis = await interaction.guild.emojis.fetch();

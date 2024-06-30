@@ -1,8 +1,6 @@
 const fs = require('fs');
 const csv = require('csv-parser');
-let IDs = [];
-let LABELS = [];
-let roles=[];
+
 let rolemoji=''
 require('dotenv').config();
 const {
@@ -27,30 +25,36 @@ const client = new Client({
 });
 
 
-function readCSVAndPopulateArrays(filePath) {
-  fs.createReadStream(filePath)
-  .pipe(csv())
-  .on('data', (data) => {
-    const [LABEL, ID] = Object.values(data);
-    LABELS.push(LABEL);
-    IDs.push(ID); 
-  })
-  .on('end', () => {
-    
-    for (let i = 0; i < IDs.length; i++) {
-      roles.push({
-        id:IDs[i],
-        label:LABELS[i]
-        
-      })
-    }
-    
-    
+async function readCSVAndPopulateArrays(filePath) {
+  let IDs = [];
+  let LABELS = [];
+  let roles = [];
+
+  return new Promise((resolve, reject) => {
+      fs.createReadStream(filePath)
+          .pipe(csv())
+          .on('data', (data) => {
+              const [LABEL, ID] = Object.values(data);
+              LABELS.push(LABEL);
+              IDs.push(ID);
+          })
+          .on('end', () => {
+              for (let i = 0; i < IDs.length; i++) {
+                  roles.push({
+                      id: IDs[i],
+                      label: LABELS[i]
+                  });
+              }
+              
+              resolve(roles);
+          })
+          .on('error', (error) => {
+              reject(error);
+          });
   });
-  
 }
 
-readCSVAndPopulateArrays("./csv/roles.csv")
+
 
 
 
@@ -58,21 +62,36 @@ readCSVAndPopulateArrays("./csv/roles.csv")
 client.on('ready', async (c) => {
   try {
     const guild = await client.guilds.fetch(process.env.GUILD_ID);
-    
+    roles=await readCSVAndPopulateArrays("./csv/roles.csv")
+    statusrole=await readCSVAndPopulateArrays("./csv/status.csv")
     
     const channel = await client.channels.cache.get(process.env.ReactRole);
     if (!channel) return;
-    var welcomeMessage = `React to the roles relative to you to gain access to different parts of the server 
-
-    Select according to your current status
-    ——————————————————————————————
-    KU Student - 
-    KU Alumni - 
-    Working - 
-    Out Student - 
-    ——————————————————————————————`;
+    var welcomeMessage = `React below to get access to the specific communities.Choose as many Communities as you would like to be a part of
+    _____________________________________________________________________________`;
+    var StatusMessage=`React According to your current status in KU
+    Student👩‍🎓
+    Teacher👩‍🏫
+    Worker👨‍💼
+    ____________________________________________________________________________`
 
     
+    const statusmessaage=await channel.send({
+      content: StatusMessage,
+      
+    });
+    for (let i = 0; i < statusrole.length; i++) {
+      rolemoji=statusrole[i].label
+      
+     if(!containsEmoji(rolemoji)){
+      const emojis = await guild.emojis.fetch();
+      
+      const newemoji = emojis.find(e => e.name === rolemoji);
+      rolemoji=newemoji
+     }
+     
+     await statusmessaage.react(rolemoji.id ? `<:${rolemoji.name}:${rolemoji.id}>` : rolemoji);
+    }
 
     
 
@@ -81,11 +100,8 @@ client.on('ready', async (c) => {
       
     });
 
-    const filePath = "./csv/reactmessage.txt";
-    fs.writeFileSync(filePath, `${message.id}\n`, function(err) {
-      if (err) throw err;
-      
-    });
+    
+   
     
     for (let i = 0; i < roles.length; i++) {
       rolemoji=roles[i].label
