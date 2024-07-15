@@ -57,7 +57,7 @@ module.exports = (client) => {
 
     //embed
     const embed =new discord.EmbedBuilder()
-    .setTitle("KU Hackfest 2023")
+    .setTitle("KUCC ")
     .setDescription(`${member} \n\n Welcome to the Discord Server of KUCC.Please Get Your Roles From The Grab Roles Channel` );
     welcomechannel.send({ files: [attachment] });
 
