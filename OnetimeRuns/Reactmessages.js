@@ -67,17 +67,18 @@ client.on('ready', async (c) => {
     
     const channel = await client.channels.cache.get(process.env.ReactRole);
     if (!channel) return;
-    var welcomeMessage = `React below to get access to the specific communities.Choose as many Communities as you would like to be a part of
-    _____________________________________________________________________________`;
-    var StatusMessage=`React According to your current status in KU
+    var welcomeMessage = `React below to get access to the specific communities.Choose as many Communities as you would like to be a part of\n
+    _____________________________________________________________________________\n`;
+    var StatusMessage=`React According to your current status in KU\n
    
-    ____________________________________________________________________________`
+    ____________________________________________________________________________\n`
 
     
     const statusmessaage=await channel.send({
       content: StatusMessage,
       
     });
+    var buf_emojiname=``;
     for (let i = 0; i < statusrole.length; i++) {
       rolemoji=statusrole[i].label
       
@@ -87,9 +88,13 @@ client.on('ready', async (c) => {
       const newemoji = emojis.find(e => e.name === rolemoji);
       rolemoji=newemoji
      }
-     
+
+
      await statusmessaage.react(rolemoji.id ? `<:${rolemoji.name}:${rolemoji.id}>` : rolemoji);
-    }
+
+    buf_emojiname = buf_emojiname.concat(`<:${rolemoji.name}:${rolemoji.id}> - ${rolemoji.name}\n`)
+    }    
+    await statusmessaage.edit(`${welcomeMessage.concat(buf_emojiname)}`)
 
     
 
@@ -99,7 +104,7 @@ client.on('ready', async (c) => {
     });
 
     
-   
+   buf_emojiname=``;
     
     for (let i = 0; i < roles.length; i++) {
       rolemoji=roles[i].label
@@ -112,8 +117,11 @@ client.on('ready', async (c) => {
      }
      
      await message.react(rolemoji.id ? `<:${rolemoji.name}:${rolemoji.id}>` : rolemoji);
+    buf_emojiname = buf_emojiname.concat(`<:${rolemoji.name}:${rolemoji.id}> - ${rolemoji.name}\n`)
     }
-    process.exit();
+
+   await message.edit(`${welcomeMessage.concat(buf_emojiname)}`)
+  process.exit();
   } catch (error) {
     console.log(error);
   }
